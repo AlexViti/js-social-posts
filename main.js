@@ -60,6 +60,8 @@ const posts = [
     }
 ];
 
+likesIdArr = [];
+
 // HTML ELEMENTS
 const postContainer = document.getElementById('container');
 
@@ -136,13 +138,16 @@ function postCreator(postObj) {
 function like(event) {
     event.preventDefault();
     const likeCounter = document.getElementById(`like-counter-${this.dataset.postid}`);
+    const post = searchPost(this.dataset.postid);
     
     this.classList.toggle('like-button--liked');
-    const post = searchPost(this.dataset.postid);
+
     if (this.classList.contains('like-button--liked')) {
         likeCounter.innerHTML = ++post.likes;
+        likesIdArr.push(post.id);
     } else {
         likeCounter.innerHTML = --post.likes;
+        likesIdArr.splice(likesIdArr.indexOf(post.id), 1);
     }
 }
 
