@@ -140,15 +140,16 @@ function like(event) {
     const likeCounter = document.getElementById(`like-counter-${this.dataset.postid}`);
     const post = searchPost(this.dataset.postid);
     
-    this.classList.toggle('like-button--liked');
-
-    if (this.classList.contains('like-button--liked')) {
+    if (!this.classList.contains('like-button--liked')) {
         likeCounter.innerHTML = ++post.likes;
         likesIdArr.push(post.id);
     } else {
         likeCounter.innerHTML = --post.likes;
         likesIdArr.splice(likesIdArr.indexOf(post.id), 1);
     }
+
+    this.classList.toggle('like-button--liked');
+
 }
 
 function searchPost(dataId) {
