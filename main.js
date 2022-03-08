@@ -70,7 +70,6 @@ function fistLetters(nameStr) {
     const nameArr = nameStr.split(' ');
     let firstLetters = '';
     for (let i = 0; i < nameArr.length && i < 3; i++) {
-        console.log(nameArr[i]);
         firstLetters += nameArr[i].charAt(0);
     }
     return firstLetters;
@@ -83,9 +82,11 @@ posts.forEach(post => postCreator(post));
 function postCreator(postObj) {
     const postTemplate = document.createElement('div');
     postTemplate.classList.add('post');
-    let profilePicHTML;
+
+    const postMeta__icon = document.createElement('div');
+    postMeta__icon.classList.add('post-meta__icon');
     if (postObj.author.image != null) {
-        profilePicHTML = `
+        postMeta__icon.innerHTML = `
             <img class="profile-pic" 
                 src="${postObj.author.image}"
                 alt="${postObj.author.name}"
@@ -93,17 +94,16 @@ function postCreator(postObj) {
         `;
     }
     else {
+        postMeta__icon.classList.add('profile-pic-default')
         const firstLetters = fistLetters(postObj.author.name);
-        profilePicHTML = `
-            <div class="profile-pic-default"><span>${firstLetters}</span></div>`
+        postMeta__icon.innerHTML = `<span>${firstLetters}</span>`
         ;
-    } 
+    }
+
     postTemplate.innerHTML = `
         <div class="post__header">
-            <div class="post-meta">                    
-                <div class="post-meta__icon">
-                    ${profilePicHTML}
-                </div>
+            <div class="post-meta">
+                ${postMeta__icon.outerHTML}
                 <div class="post-meta__data">
                     <div class="post-meta__author">${postObj.author.name}</div>
                     <div class="post-meta__time">${dateFormatConverter(postObj.created)}</div>
@@ -117,16 +117,37 @@ function postCreator(postObj) {
         <div class="post__footer">
             <div class="likes js-likes">
                 <div class="likes__cta">
-                    <a class="like-button  js-like-button" href="" data-postid="1">
+                    <a class="like-button  js-like-button" href="#" data-postid="${postObj.id}">
                         <i class="like-button__icon fas fa-thumbs-up" aria-hidden="true"></i>
                         <span class="like-button__label">Mi Piace</span>
                     </a>
                 </div>
                 <div class="likes__counter">
-                    Piace a <b id="like-counter-1" class="js-likes-counter">${postObj.likes}</b> persone
+                    Piace a <b id="like-counter-${postObj.id}" class="js-likes-counter">${postObj.likes}</b> persone
                 </div>
             </div> 
         </div>         
     `;
     postContainer.append(postTemplate);
+    const likeBtn = document.querySelector(`[data-postid="${postObj.id}"]`);
+    likeBtn.addEventListener('click', like);
+}
+
+function like(event) {
+    event.preventDefault();
+    const likeCounter = document.getElementById(`like-counter-${this.dataset.postid}`);
+    
+    this.classList.toggle('like-button--liked');
+    const post = searchPost(this.dataset.postid);
+    if (this.classList.contains('like-button--liked')) {
+        likeCounter.innerHTML = ++post.likes;
+    } else {
+        likeCounter.innerHTML = --post.likes;
+    }
+}
+
+function searchPost(dataId) {
+    for (let i = 0; i < posts.length; i++) {
+        if (posts[i].id == parseInt(dataId)) return posts[i];
+    }
 }
