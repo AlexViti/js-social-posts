@@ -66,6 +66,13 @@ const postContainer = document.getElementById('container');
 // Convert date into european format
 const dateFormatConverter = (date) => date.split('-').reverse().join('/');
 
+function fistLetters(nameStr) {
+    const nameArr = nameStr.split(' ');
+    console.log(nameArr)
+    const firstLetters = nameArr[0].charAt(0) + ' ' + nameArr[1].charAt(0);
+    return firstLetters;
+}
+
 // Create a post for each object in the array
 posts.forEach(post => postCreator(post));
 
@@ -73,11 +80,26 @@ posts.forEach(post => postCreator(post));
 function postCreator(postObj) {
     const postTemplate = document.createElement('div');
     postTemplate.classList.add('post');
+    let profilePicHTML;
+    if (postObj.author.image != null) {
+        profilePicHTML = `
+            <img class="profile-pic" 
+                src="${postObj.author.image}"
+                alt="${postObj.author.name}"
+            > 
+        `;
+    }
+    else {
+        const firstLetters = fistLetters(postObj.author.name);
+        profilePicHTML = `
+            <div class="profile-pic-default"><span>${firstLetters}</span></div>`
+        ;
+    } 
     postTemplate.innerHTML = `
         <div class="post__header">
             <div class="post-meta">                    
                 <div class="post-meta__icon">
-                    <img class="profile-pic" src="${postObj.author.image}" alt="${postObj.author.name}">                    
+                    ${profilePicHTML}
                 </div>
                 <div class="post-meta__data">
                     <div class="post-meta__author">${postObj.author.name}</div>
