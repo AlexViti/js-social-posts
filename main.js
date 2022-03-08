@@ -68,8 +68,11 @@ const dateFormatConverter = (date) => date.split('-').reverse().join('/');
 
 function fistLetters(nameStr) {
     const nameArr = nameStr.split(' ');
-    console.log(nameArr)
-    const firstLetters = nameArr[0].charAt(0) + ' ' + nameArr[1].charAt(0);
+    let firstLetters = '';
+    for (let i = 0; i < nameArr.length && i < 3; i++) {
+        console.log(nameArr[i]);
+        firstLetters += nameArr[i].charAt(0);
+    }
     return firstLetters;
 }
 
