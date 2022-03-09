@@ -68,13 +68,13 @@ const postContainer = document.getElementById('container');
 // Convert date into european format
 const dateFormatConverter = (date) => date.split('-').reverse().join('/');
 
-function fistLetters(nameStr) {
+function initials(nameStr) {
     const nameArr = nameStr.split(' ');
-    let firstLetters = '';
+    let initials = '';
     for (let i = 0; i < nameArr.length && i < 3; i++) {
-        firstLetters += nameArr[i].charAt(0);
+        initials += nameArr[i][0];
     }
-    return firstLetters;
+    return initials;
 }
 
 // Create a post for each object in the array
@@ -97,7 +97,7 @@ function postCreator(postObj) {
     }
     else {
         postMeta__icon.classList.add('profile-pic-default')
-        postMeta__icon.innerHTML = `<span>${fistLetters(postObj.author.name)}</span>`
+        postMeta__icon.innerHTML = `<span>${initials(postObj.author.name)}</span>`
         ;
     }
 
