@@ -87,7 +87,7 @@ function postCreator(postObj) {
 
     const postMeta__icon = document.createElement('div');
     postMeta__icon.classList.add('post-meta__icon');
-    if (postObj.author.image != null) {
+    if (postObj.author.image) {
         postMeta__icon.innerHTML = `
             <img class="profile-pic" 
                 src="${postObj.author.image}"
@@ -97,8 +97,7 @@ function postCreator(postObj) {
     }
     else {
         postMeta__icon.classList.add('profile-pic-default')
-        const firstLetters = fistLetters(postObj.author.name);
-        postMeta__icon.innerHTML = `<span>${firstLetters}</span>`
+        postMeta__icon.innerHTML = `<span>${fistLetters(postObj.author.name)}</span>`
         ;
     }
 
@@ -153,7 +152,8 @@ function like(event) {
 }
 
 function searchPost(dataId) {
-    for (let i = 0; i < posts.length; i++) {
+    for (let i in posts) {
+        console.log(i)
         if (posts[i].id == parseInt(dataId)) return posts[i];
     }
 }
